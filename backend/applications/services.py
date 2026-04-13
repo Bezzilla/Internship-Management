@@ -3,7 +3,9 @@ from internships.models import Internship
 
 
 def apply_to_internship(student, data: dict) -> Application:
-    internship = Internship.objects.get(id=data['internship'], status=Internship.APPROVED)
+    internship = data['internship']
+    if internship.status != Internship.APPROVED:
+        raise ValueError("This internship is not open for applications.")
 
     if Application.objects.filter(student=student, internship=internship).exists():
         raise ValueError("You have already applied to this internship.")

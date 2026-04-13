@@ -1,5 +1,6 @@
 from rest_framework import generics, permissions
 from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
 from .models import Application
 from .serializers import ApplicationSerializer
 from . import services
@@ -22,8 +23,14 @@ class ApplicationCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         try:
             services.apply_to_internship(self.request.user, serializer.validated_data)
-        except ValueError as e:
+        except (ValueError, Exception) as e:
             raise ValidationError(str(e))
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({'detail': 'Application submitted successfully.'}, status=201)
 
 
 class StudentApplicationListView(generics.ListAPIView):
