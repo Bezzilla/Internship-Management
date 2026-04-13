@@ -16,50 +16,59 @@ export default function Listings() {
 
   const updateStatus = async (id, status) => {
     await api.patch(`/internships/${id}/approve/`, { status })
-    setSuccess(`Listing ${status}.`)
+    setSuccess(`Listing ${status === 'approved' ? 'approved and is now live ✓' : 'rejected'}.`)
     setInternships(prev => prev.map(i => i.id === id ? { ...i, status } : i))
   }
 
-  const pending = internships.filter(i => i.status === 'pending_approval')
+  const pending  = internships.filter(i => i.status === 'pending_approval')
   const approved = internships.filter(i => i.status === 'approved')
+  const rejected = internships.filter(i => i.status === 'rejected')
+
+  const statusLabel = {
+    pending_approval: 'Pending Review',
+    approved: 'Live',
+    rejected: 'Rejected',
+  }
+  const statusCls = {
+    pending_approval: 's-pending',
+    approved: 's-approved',
+    rejected: 's-reject',
+  }
 
   return (
     <Layout>
       <div className="page-header">
         <div>
-          <div className="page-title">Approve listings</div>
-          <div className="page-sub">Review company-submitted internship posts before they go live</div>
+          <div className="page-title">Approve Listings</div>
+          <div className="page-sub">Review and approve internship posts submitted by companies</div>
         </div>
       </div>
-      <div className="arch-callout">
-        <span className="label">PATCH</span>
-        /api/internships/{'<id>'}/approve/ → admin sets status: pending_approval → approved | rejected
-      </div>
 
-      {success && <div className="success-box">{success}</div>}
+      {success && <div className="success-box">✓ {success}</div>}
 
       <div className="metric-row">
         <div className="metric">
-          <div className="metric-label">awaiting approval</div>
+          <div className="metric-label">Awaiting Approval</div>
           <div className="metric-value amber">{pending.length}</div>
         </div>
         <div className="metric">
-          <div className="metric-label">live listings</div>
+          <div className="metric-label">Live Listings</div>
           <div className="metric-value green">{approved.length}</div>
         </div>
         <div className="metric">
-          <div className="metric-label">total listings</div>
-          <div className="metric-value">{internships.length}</div>
+          <div className="metric-label">Rejected</div>
+          <div className="metric-value" style={{ color: 'var(--red)' }}>{rejected.length}</div>
         </div>
       </div>
 
       <div className="card">
-        <div className="card-header">pending listings</div>
+        <div className="card-header">All Listings</div>
         <table className="tbl">
           <thead>
             <tr>
               <th>Position</th>
               <th>Company</th>
+              <th>Location</th>
               <th>Deadline</th>
               <th>Status</th>
               <th style={{ textAlign: 'right' }}>Action</th>
@@ -67,19 +76,25 @@ export default function Listings() {
           </thead>
           <tbody>
             {loading && (
-              <tr><td colSpan={5} style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-muted)' }}>loading...</td></tr>
+              <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '32px' }}>Loading...</td></tr>
             )}
             {!loading && internships.length === 0 && (
-              <tr><td colSpan={5} style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-muted)' }}>no listings.</td></tr>
+              <tr><td colSpan={6}>
+                <div className="empty-state">
+                  <div className="empty-state-icon">📭</div>
+                  <div className="empty-state-title">No listings submitted yet</div>
+                </div>
+              </td></tr>
             )}
             {internships.map(item => (
               <tr key={item.id}>
                 <td><b>{item.title}</b></td>
-                <td className="text-muted">{item.company_name}</td>
-                <td style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-muted)' }}>{item.deadline}</td>
+                <td style={{ color: 'var(--text-muted)' }}>{item.company_name}</td>
+                <td style={{ color: 'var(--text-muted)' }}>{item.location}</td>
+                <td style={{ color: 'var(--text-muted)' }}>{item.deadline}</td>
                 <td>
-                  <span className={`status ${item.status === 'approved' ? 's-approved' : item.status === 'rejected' ? 's-reject' : 's-pending'}`}>
-                    {item.status}
+                  <span className={`status ${statusCls[item.status]}`}>
+                    {statusLabel[item.status]}
                   </span>
                 </td>
                 <td style={{ textAlign: 'right' }}>

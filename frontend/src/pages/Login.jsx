@@ -26,7 +26,7 @@ export default function Login() {
       else if (role === 'supervisor') navigate('/supervisor/post')
       else if (role === 'admin') navigate('/admin/listings')
     } catch {
-      setError('Invalid username or password.')
+      setError('Invalid username or password. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -39,27 +39,27 @@ export default function Login() {
           <div className="logo-mark">IH</div>
           InternHub
         </div>
-        <div className="auth-title">Sign in</div>
-        <div className="auth-sub">Access your internship dashboard</div>
+        <div className="auth-title">Welcome back</div>
+        <div className="auth-sub">Sign in to your account to continue</div>
 
         {error && <div className="error-box">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">username</label>
-            <input className="form-input" name="username" value={form.username} onChange={handleChange} required />
+            <label className="form-label">Username</label>
+            <input className="form-input" name="username" value={form.username} onChange={handleChange} placeholder="Enter your username" required />
           </div>
           <div className="form-group">
-            <label className="form-label">password</label>
-            <input className="form-input" type="password" name="password" value={form.password} onChange={handleChange} required />
+            <label className="form-label">Password</label>
+            <input className="form-input" type="password" name="password" value={form.password} onChange={handleChange} placeholder="Enter your password" required />
           </div>
-          <button className="btn btn-primary" style={{ width: '100%', padding: '9px' }} type="submit" disabled={loading}>
-            {loading ? 'signing in...' : 'sign in →'}
+          <button className="btn btn-primary" style={{ width: '100%', padding: '10px', fontSize: '14px', marginTop: '4px' }} type="submit" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
         <div className="auth-footer">
-          no account? <Link to="/register">register here</Link>
+          Don't have an account? <Link to="/register">Create one here</Link>
         </div>
       </div>
     </div>

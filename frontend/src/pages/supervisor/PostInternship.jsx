@@ -19,7 +19,7 @@ export default function PostInternship() {
     setLoading(true)
     try {
       await api.post('/internships/create/', form)
-      setSuccess('Internship submitted for admin approval.')
+      setSuccess('Your internship has been submitted and is pending admin approval.')
       setForm({ title: '', company_name: '', location: '', duration: '', deadline: '', description: '' })
     } catch (err) {
       const data = err.response?.data
@@ -33,52 +33,50 @@ export default function PostInternship() {
     <Layout>
       <div className="page-header">
         <div>
-          <div className="page-title">Post internship</div>
-          <div className="page-sub">Submitted listings require admin approval before going live</div>
+          <div className="page-title">Post an Internship</div>
+          <div className="page-sub">Fill in the details below. Your listing will go live after admin approval.</div>
         </div>
       </div>
-      <div className="arch-callout">
-        <span className="label">POST</span>
-        /api/internships/create/ → creates listing with status="pending_approval"
-      </div>
 
-      {success && <div className="success-box">{success}</div>}
+      {success && <div className="success-box">✓ {success}</div>}
       {error && <div className="error-box">{error}</div>}
 
       <div className="card">
+        <div className="card-header">Internship Details</div>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
             <div className="form-grid">
               <div className="form-group">
-                <label className="form-label">position title *</label>
-                <input className="form-input" name="title" value={form.title} onChange={handleChange} required />
+                <label className="form-label">Position Title *</label>
+                <input className="form-input" name="title" value={form.title} onChange={handleChange} placeholder="e.g. Software Engineering Intern" required />
               </div>
               <div className="form-group">
-                <label className="form-label">company name *</label>
-                <input className="form-input" name="company_name" value={form.company_name} onChange={handleChange} required />
+                <label className="form-label">Company Name *</label>
+                <input className="form-input" name="company_name" value={form.company_name} onChange={handleChange} placeholder="e.g. Acme Corp" required />
               </div>
             </div>
             <div className="form-grid">
               <div className="form-group">
-                <label className="form-label">location *</label>
-                <input className="form-input" name="location" value={form.location} onChange={handleChange} required />
+                <label className="form-label">Location *</label>
+                <input className="form-input" name="location" value={form.location} onChange={handleChange} placeholder="e.g. Bangkok, Thailand" required />
               </div>
               <div className="form-group">
-                <label className="form-label">duration</label>
+                <label className="form-label">Duration</label>
                 <input className="form-input" name="duration" value={form.duration} onChange={handleChange} placeholder="e.g. 3 months" />
               </div>
             </div>
             <div className="form-group">
-              <label className="form-label">application deadline *</label>
-              <input className="form-input" type="date" name="deadline" value={form.deadline} onChange={handleChange} required />
+              <label className="form-label">Application Deadline *</label>
+              <input className="form-input" type="date" name="deadline" value={form.deadline} onChange={handleChange} required style={{ maxWidth: '240px' }} />
             </div>
             <div className="form-group">
-              <label className="form-label">description *</label>
-              <textarea className="form-input" name="description" value={form.description} onChange={handleChange} required rows={4} />
+              <label className="form-label">Description *</label>
+              <textarea className="form-input" name="description" value={form.description} onChange={handleChange} required rows={5} placeholder="Describe the role, responsibilities, and requirements..." />
             </div>
-            <div className="flex justify-end">
+            <div className="divider" />
+            <div className="flex justify-end gap-8">
               <button className="btn btn-primary" type="submit" disabled={loading}>
-                {loading ? 'submitting...' : 'Submit for approval →'}
+                {loading ? 'Submitting...' : 'Submit for Approval →'}
               </button>
             </div>
           </form>

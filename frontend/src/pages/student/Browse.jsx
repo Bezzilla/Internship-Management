@@ -30,12 +30,14 @@ export default function Browse() {
     formData.append('internship', internship.id)
     formData.append('resume', resume)
     try {
-      await api.post('/applications/apply/', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-      setSuccess(`Applied to ${internship.title} successfully!`)
+      await api.post('/applications/apply/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      setSuccess(`Successfully applied to ${internship.title}!`)
       setApplying(null)
       setResume(null)
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to apply.')
+      setError(err.response?.data?.detail || Object.values(err.response?.data || {}).flat().join(' ') || 'Failed to apply.')
     }
   }
 
@@ -43,57 +45,66 @@ export default function Browse() {
     <Layout>
       <div className="page-header">
         <div>
-          <div className="page-title">Browse internships</div>
-          <div className="page-sub">{filtered.length} positions available</div>
+          <div className="page-title">Browse Internships</div>
+          <div className="page-sub">{filtered.length} positions available — find your next opportunity</div>
         </div>
       </div>
-      <div className="arch-callout">
-        <span className="label">GET</span>
-        /api/internships/ → returns only admin-approved listings
-      </div>
 
-      {success && <div className="success-box">{success}</div>}
+      {success && <div className="success-box">✓ {success}</div>}
       {error && <div className="error-box">{error}</div>}
 
       <div className="search-row">
         <input
           className="search-input"
-          placeholder="Search by role or company..."
+          placeholder="🔍  Search by role, company, or location..."
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
       </div>
 
       <div className="card">
-        <div className="card-header">listings</div>
+        <div className="card-header">
+          Available Positions
+          <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '12px' }}>{filtered.length} results</span>
+        </div>
         <div>
-          {loading && <div style={{ padding: '16px', fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-muted)' }}>loading...</div>}
+          {loading && (
+            <div className="empty-state">
+              <div className="empty-state-sub">Loading internships...</div>
+            </div>
+          )}
           {!loading && filtered.length === 0 && (
-            <div style={{ padding: '16px', fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-muted)' }}>no internships found.</div>
+            <div className="empty-state">
+              <div className="empty-state-icon">📭</div>
+              <div className="empty-state-title">No internships found</div>
+              <div className="empty-state-sub">Try a different search or check back later.</div>
+            </div>
           )}
           {filtered.map(item => (
             <div key={item.id} className="intern-item">
               <div className="company-mark">{item.company_name.slice(0, 2).toUpperCase()}</div>
               <div className="intern-info">
                 <div className="intern-title">{item.title}</div>
-                <div className="intern-meta">{item.company_name} · {item.location} · {item.duration}</div>
+                <div className="intern-company">{item.company_name}</div>
+                <div className="intern-meta">📍 {item.location} &nbsp;·&nbsp; ⏱ {item.duration} &nbsp;·&nbsp; 📅 Deadline: {item.deadline}</div>
                 <div className="tags">
                   <span className="tag">{item.location}</span>
-                  <span className="tag">deadline: {item.deadline}</span>
+                  <span className="tag">{item.duration}</span>
                 </div>
               </div>
               <div className="intern-actions">
                 {applying === item.id ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'flex-end' }}>
-                    <input type="file" accept=".pdf" onChange={e => setResume(e.target.files[0])} style={{ fontSize: '11px' }} />
-                    <div style={{ display: 'flex', gap: '6px' }}>
-                      <button className="btn btn-sm" onClick={() => setApplying(null)}>cancel</button>
-                      <button className="btn btn-primary btn-sm" onClick={() => handleApply(item)}>submit →</button>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
+                    <label style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 500 }}>Upload Resume (PDF)</label>
+                    <input type="file" accept=".pdf" onChange={e => setResume(e.target.files[0])} style={{ fontSize: '12px' }} />
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button className="btn btn-sm" onClick={() => { setApplying(null); setError('') }}>Cancel</button>
+                      <button className="btn btn-primary btn-sm" onClick={() => handleApply(item)}>Submit Application</button>
                     </div>
                   </div>
                 ) : (
                   <button className="btn btn-primary btn-sm" onClick={() => { setApplying(item.id); setError(''); setSuccess('') }}>
-                    Apply
+                    Apply Now
                   </button>
                 )}
               </div>

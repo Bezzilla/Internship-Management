@@ -1,16 +1,16 @@
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 
-const SIDEBAR_ITEMS = {
+const SIDEBAR = {
   student: [
-    { label: 'Browse Internships', path: '/student/browse', dot: false },
-    { label: 'My Applications',    path: '/student/applications', dot: true },
+    { label: 'Browse Internships', path: '/student/browse',       icon: '🔍' },
+    { label: 'My Applications',    path: '/student/applications',  icon: '📋' },
   ],
   supervisor: [
-    { label: 'Post Internship',    path: '/supervisor/post', dot: false },
-    { label: 'Review Applicants',  path: '/supervisor/applicants', dot: true },
+    { label: 'Post Internship',   path: '/supervisor/post',       icon: '➕' },
+    { label: 'Review Applicants', path: '/supervisor/applicants', icon: '👥' },
   ],
   admin: [
-    { label: 'Approve Listings',   path: '/admin/listings', dot: true },
+    { label: 'Approve Listings',  path: '/admin/listings',        icon: '✅' },
   ],
 }
 
@@ -19,12 +19,15 @@ export default function Layout({ children }) {
   const location = useLocation()
   const user = JSON.parse(localStorage.getItem('user') || '{}')
   const role = user.role || 'student'
-  const items = SIDEBAR_ITEMS[role] || []
+  const items = SIDEBAR[role] || []
+  const initials = (user.first_name?.[0] || user.username?.[0] || '?').toUpperCase()
 
   const logout = () => {
     localStorage.clear()
     navigate('/login')
   }
+
+  const roleLabel = { student: 'Student', supervisor: 'Supervisor', admin: 'Admin' }
 
   return (
     <>
@@ -34,22 +37,28 @@ export default function Layout({ children }) {
           InternHub
         </div>
         <div className="nav-right">
-          <span className="nav-role">role: {role} · {user.username}</span>
-          <button className="nav-logout" onClick={logout}>logout</button>
+          <div className="nav-user">
+            <div className="nav-avatar">{initials}</div>
+            <div>
+              <div className="nav-username">{user.first_name || user.username}</div>
+            </div>
+            <span className="nav-role-badge">{roleLabel[role]}</span>
+          </div>
+          <button className="nav-logout" onClick={logout}>Sign out</button>
         </div>
       </nav>
 
       <div className="app">
         <div className="sidebar">
-          <div className="sidebar-role">{role}</div>
+          <div className="sidebar-section">Menu</div>
           {items.map((item) => (
             <Link
               key={item.path}
               to={item.path}
               className={`sidebar-item ${location.pathname === item.path ? 'active' : ''}`}
             >
+              <span className="sidebar-icon">{item.icon}</span>
               {item.label}
-              {item.dot && <span className="sidebar-dot" />}
             </Link>
           ))}
         </div>
