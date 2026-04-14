@@ -43,8 +43,8 @@ export default function Register() {
     <div className="auth-container" style={{ padding: '20px 0' }}>
       <div className="auth-card" style={{ maxWidth: '500px' }}>
         <div className="auth-logo">
-          <div className="logo-mark">IH</div>
-          InternHub
+          <div className="logo-mark">IM</div>
+          Internship Management System
         </div>
         <div className="auth-title">Create your account</div>
         <div className="auth-sub">Join the platform to find or post internships</div>

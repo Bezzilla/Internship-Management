@@ -33,8 +33,8 @@ export default function Layout({ children }) {
     <>
       <nav className="top-nav">
         <div className="logo">
-          <div className="logo-mark">IH</div>
-          InternHub
+          <div className="logo-mark">IM</div>
+          Internship Management System
         </div>
         <div className="nav-right">
           <div className="nav-user">

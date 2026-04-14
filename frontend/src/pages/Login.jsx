@@ -36,8 +36,8 @@ export default function Login() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-logo">
-          <div className="logo-mark">IH</div>
-          InternHub
+          <div className="logo-mark">IM</div>
+          Internship Management System
         </div>
         <div className="auth-title">Welcome back</div>
         <div className="auth-sub">Sign in to your account to continue</div>
