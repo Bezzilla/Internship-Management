@@ -59,7 +59,7 @@ export default function Register() {
           </div>
           <div className={`role-option ${role === 'supervisor' ? 'selected' : ''}`} onClick={() => setRole('supervisor')}>
             <div className="role-option-icon">🏢</div>
-            <div className="role-option-title">Company</div>
+            <div className="role-option-title">Supervisor</div>
             <div className="role-option-sub">Post & manage internships</div>
           </div>
         </div>

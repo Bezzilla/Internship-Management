@@ -176,3 +176,24 @@ Frontend runs at: **http://localhost:5173**
 ---
 
 ## Screenshots
+
+### Login Page
+![Login Page](screenshots/login.png)
+
+### Register Page
+![Register Page](screenshots/student_register.png)
+
+### Student — Browse Internships
+![Browse Internships](screenshots/student_browse.png)
+
+### Student — My Applications
+![My Applications](screenshots/student_applications.png)
+
+### Supervisor — Post Internship
+![Post Internship](screenshots/supervisor_post.png)
+
+### Supervisor — Review Applicants
+![Review Applicants](screenshots/supervisor_applicants.png)
+
+### Admin — Approve Listings
+![Approve Listings](screenshots/admin_listings.png)
