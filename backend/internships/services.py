@@ -10,6 +10,7 @@ def create_internship(supervisor, data: dict) -> Internship:
         location=data['location'],
         duration=data['duration'],
         deadline=data['deadline'],
+        logo=data.get('logo'),
         status=Internship.PENDING_APPROVAL,
     )
 

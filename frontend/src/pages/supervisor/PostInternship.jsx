@@ -8,6 +8,8 @@ export default function PostInternship() {
     duration: '', deadline: '', description: '',
   })
   const [listings, setListings] = useState([])
+  const [logo, setLogo] = useState(null)
+  const [logoPreview, setLogoPreview] = useState(null)
   const [success, setSuccess] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -18,15 +20,27 @@ export default function PostInternship() {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0]
+    setLogo(file)
+    setLogoPreview(file ? URL.createObjectURL(file) : null)
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(''); setSuccess('')
     setLoading(true)
     try {
-      const res = await api.post('/internships/create/', form)
+      const formData = new FormData()
+      Object.entries(form).forEach(([k, v]) => formData.append(k, v))
+      if (logo) formData.append('logo', logo)
+      const res = await api.post('/internships/create/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
       setSuccess('Your internship has been submitted and is pending admin approval.')
       setListings(prev => [res.data, ...prev])
       setForm({ title: '', company_name: '', location: '', duration: '', deadline: '', description: '' })
+      setLogo(null); setLogoPreview(null)
     } catch (err) {
       const data = err.response?.data
       setError(data ? Object.values(data).flat().join(' ') : 'Failed to post internship.')
@@ -95,6 +109,17 @@ export default function PostInternship() {
             <div className="form-group">
               <label className="form-label">Description *</label>
               <textarea className="form-input" name="description" value={form.description} onChange={handleChange} required rows={5} placeholder="Describe the role, responsibilities, and requirements..." />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Company Logo <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(optional, PNG/JPG)</span></label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                {logoPreview ? (
+                  <img src={logoPreview} alt="logo preview" style={{ width: '52px', height: '52px', borderRadius: '10px', objectFit: 'cover', border: '1px solid var(--border)' }} />
+                ) : (
+                  <div className="company-mark" style={{ flexShrink: 0 }}>IMG</div>
+                )}
+                <input type="file" accept="image/*" onChange={handleLogoChange} style={{ fontSize: '13px' }} />
+              </div>
             </div>
             <div className="divider" />
             <div className="flex justify-end gap-8">

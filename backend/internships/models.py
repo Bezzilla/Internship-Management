@@ -25,6 +25,7 @@ class Internship(models.Model):
         related_name='posted_internships',
         limit_choices_to={'role': 'supervisor'},
     )
+    logo = models.ImageField(upload_to='internship_logos/', blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING_APPROVAL)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
