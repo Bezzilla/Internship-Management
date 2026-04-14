@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Layout from '../../components/Layout'
 import api from '../../api/axios'
 
@@ -7,9 +7,14 @@ export default function PostInternship() {
     title: '', company_name: '', location: '',
     duration: '', deadline: '', description: '',
   })
+  const [listings, setListings] = useState([])
   const [success, setSuccess] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    api.get('/internships/').then(res => setListings(res.data))
+  }, [])
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
@@ -18,8 +23,9 @@ export default function PostInternship() {
     setError(''); setSuccess('')
     setLoading(true)
     try {
-      await api.post('/internships/create/', form)
+      const res = await api.post('/internships/create/', form)
       setSuccess('Your internship has been submitted and is pending admin approval.')
+      setListings(prev => [res.data, ...prev])
       setForm({ title: '', company_name: '', location: '', duration: '', deadline: '', description: '' })
     } catch (err) {
       const data = err.response?.data
@@ -27,6 +33,23 @@ export default function PostInternship() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleDelete = async (id) => {
+    await api.delete(`/internships/${id}/delete/`)
+    setListings(prev => prev.filter(i => i.id !== id))
+    setSuccess('Listing deleted.')
+  }
+
+  const statusLabel = {
+    pending_approval: 'Pending Approval',
+    approved: 'Live',
+    rejected: 'Rejected',
+  }
+  const statusCls = {
+    pending_approval: 's-pending',
+    approved: 's-approved',
+    rejected: 's-reject',
   }
 
   return (
@@ -81,6 +104,43 @@ export default function PostInternship() {
             </div>
           </form>
         </div>
+      </div>
+
+      {/* My Listings */}
+      <div className="card">
+        <div className="card-header">
+          My Listings
+          <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '12px' }}>{listings.length} total</span>
+        </div>
+        <table className="tbl">
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Location</th>
+              <th>Deadline</th>
+              <th>Status</th>
+              <th style={{ textAlign: 'right' }}>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {listings.length === 0 && (
+              <tr><td colSpan={5} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '24px' }}>No listings yet.</td></tr>
+            )}
+            {listings.map(item => (
+              <tr key={item.id}>
+                <td><b>{item.title}</b><br /><span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{item.company_name}</span></td>
+                <td style={{ color: 'var(--text-muted)' }}>{item.location}</td>
+                <td style={{ color: 'var(--text-muted)' }}>{item.deadline}</td>
+                <td><span className={`status ${statusCls[item.status]}`}>{statusLabel[item.status]}</span></td>
+                <td style={{ textAlign: 'right' }}>
+                  <button className="btn btn-danger btn-sm" onClick={() => handleDelete(item.id)}>
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </Layout>
   )

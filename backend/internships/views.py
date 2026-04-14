@@ -38,6 +38,18 @@ class InternshipDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
+class InternshipDeleteView(generics.DestroyAPIView):
+    serializer_class = InternshipSerializer
+    permission_classes = [IsSupervisor]
+
+    def get_queryset(self):
+        return Internship.objects.filter(supervisor=self.request.user)
+
+    def perform_destroy(self, instance):
+        from . import services
+        services.delete_internship(self.request.user, instance.id)
+
+
 class InternshipApproveView(generics.UpdateAPIView):
     queryset = Internship.objects.all()
     serializer_class = InternshipSerializer

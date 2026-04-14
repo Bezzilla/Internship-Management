@@ -19,6 +19,11 @@ export default function Applications() {
     })
   }, [])
 
+  const withdraw = async (id) => {
+    await api.delete(`/applications/${id}/withdraw/`)
+    setApplications(prev => prev.filter(a => a.id !== id))
+  }
+
   const counts = {
     total:    applications.length,
     pending:  applications.filter(a => a.status === 'pending').length,
@@ -58,15 +63,16 @@ export default function Applications() {
               <th>Position</th>
               <th>Date Applied</th>
               <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {loading && (
-              <tr><td colSpan={3} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '32px' }}>Loading...</td></tr>
+              <tr><td colSpan={4} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '32px' }}>Loading...</td></tr>
             )}
             {!loading && applications.length === 0 && (
               <tr>
-                <td colSpan={3}>
+                <td colSpan={4}>
                   <div className="empty-state">
                     <div className="empty-state-icon">📋</div>
                     <div className="empty-state-title">No applications yet</div>
@@ -111,6 +117,13 @@ export default function Applications() {
                           </a>
                         </div>
                       </div>
+                    )}
+                  </td>
+                  <td>
+                    {app.status === 'pending' && (
+                      <button className="btn btn-danger btn-sm" onClick={() => withdraw(app.id)}>
+                        Withdraw
+                      </button>
                     )}
                   </td>
                 </tr>

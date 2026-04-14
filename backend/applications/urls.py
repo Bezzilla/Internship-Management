@@ -6,4 +6,5 @@ urlpatterns = [
     path('apply/', views.ApplicationCreateView.as_view(), name='apply'),
     path('internship/<int:internship_id>/', views.InternshipApplicationListView.as_view(), name='internship-applications'),
     path('<int:pk>/status/', views.ApplicationStatusUpdateView.as_view(), name='application-status'),
+    path('<int:pk>/withdraw/', views.ApplicationWithdrawView.as_view(), name='application-withdraw'),
 ]

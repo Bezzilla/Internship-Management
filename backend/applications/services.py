@@ -29,6 +29,13 @@ def get_internship_applications(supervisor, internship_id):
     )
 
 
+def withdraw_application(student, application_id: int) -> None:
+    application = Application.objects.get(id=application_id, student=student)
+    if application.status != Application.PENDING:
+        raise ValueError("Only pending applications can be withdrawn.")
+    application.delete()
+
+
 def update_application_status(supervisor, application_id: int, status: str) -> Application:
     if status not in [Application.ACCEPTED, Application.REJECTED]:
         raise ValueError(f"Invalid status: {status}")

@@ -22,6 +22,11 @@ def get_internships_for_user(user):
     return Internship.objects.filter(status=Internship.APPROVED)
 
 
+def delete_internship(supervisor, internship_id: int) -> None:
+    internship = Internship.objects.get(id=internship_id, supervisor=supervisor)
+    internship.delete()
+
+
 def approve_internship(internship: Internship, status: str) -> Internship:
     if status not in [Internship.APPROVED, Internship.REJECTED]:
         raise ValueError(f"Invalid status: {status}")

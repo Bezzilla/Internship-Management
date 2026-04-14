@@ -6,4 +6,5 @@ urlpatterns = [
     path('create/', views.InternshipCreateView.as_view(), name='internship-create'),
     path('<int:pk>/', views.InternshipDetailView.as_view(), name='internship-detail'),
     path('<int:pk>/approve/', views.InternshipApproveView.as_view(), name='internship-approve'),
+    path('<int:pk>/delete/', views.InternshipDeleteView.as_view(), name='internship-delete'),
 ]

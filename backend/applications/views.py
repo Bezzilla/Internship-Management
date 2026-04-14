@@ -51,6 +51,20 @@ class InternshipApplicationListView(generics.ListAPIView):
         )
 
 
+class ApplicationWithdrawView(generics.DestroyAPIView):
+    serializer_class = ApplicationSerializer
+    permission_classes = [IsStudent]
+
+    def get_queryset(self):
+        return Application.objects.filter(student=self.request.user)
+
+    def perform_destroy(self, instance):
+        try:
+            services.withdraw_application(self.request.user, instance.id)
+        except ValueError as e:
+            raise ValidationError(str(e))
+
+
 class ApplicationStatusUpdateView(generics.UpdateAPIView):
     serializer_class = ApplicationSerializer
     permission_classes = [IsSupervisor]
