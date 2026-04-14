@@ -108,7 +108,7 @@ export default function Browse() {
                   <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--border)' }}
                     onClick={e => e.stopPropagation()}>
                     {item.description && (
-                      <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '12px', lineHeight: '1.6' }}>{item.description}</p>
+                      <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '12px', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>{item.description}</p>
                     )}
                     <div className="intern-actions" style={{ justifyContent: 'flex-end' }}>
                       {applying === item.id ? (
