@@ -57,7 +57,7 @@ export default function Browse() {
       <div className="search-row">
         <input
           className="search-input"
-          placeholder="🔍  Search by role, company, or location..."
+          placeholder="🔍  Search internships..."
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
