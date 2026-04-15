@@ -65,7 +65,7 @@ The system uses a **Layered Architecture (N-Tier)** with 4 distinct layers, each
 | **Supervisor** | Self-register as Supervisor | Post internship listings, upload company logo, delete own listings, review applicants, accept or reject applicants |
 | **Admin** | Django admin panel only | View all listings, approve or reject pending listings, delete any listing |
 
-> Admin accounts cannot be created through the registration page. They must be created via the Django admin panel and assigned the `admin` role manually.
+Admin accounts cannot be created through the registration page. They must be created via the Django admin panel and assigned the `admin` role manually.
 
 ### Privacy Rule
 The supervisor's contact email is hidden by default. It is only revealed to a student once their application has been **accepted**.
@@ -183,17 +183,21 @@ Frontend runs at: **http://localhost:5173**
 ### Register Page
 ![Register Page](screenshots/student_register.png)
 
-### Student — Browse Internships
+### Student : Browse Internships
 ![Browse Internships](screenshots/student_browse.png)
 
-### Student — My Applications
+### Student : My Applications
 ![My Applications](screenshots/student_applications.png)
 
-### Supervisor — Post Internship
+### Supervisor : Post Internship
 ![Post Internship](screenshots/supervisor_post.png)
 
-### Supervisor — Review Applicants
+### Supervisor : Review Applicants
 ![Review Applicants](screenshots/supervisor_applicants.png)
 
-### Admin — Approve Listings
+### Student : student_applications
+![Review Applicants](screenshots/student_applications_accept.png)
+
+### Admin : Approve Listings
 ![Approve Listings](screenshots/admin_listings.png)
+
