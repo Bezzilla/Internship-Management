@@ -122,7 +122,14 @@ export default function Listings() {
                   {isExpanded && (
                     <tr key={`${item.id}-desc`}>
                       <td colSpan={6} style={{ background: 'var(--blue-light)', padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
-                        <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>{item.description}</div>
+                        <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                          {item.logo ? (
+                            <img src={item.logo} alt="logo" style={{ width: '48px', height: '48px', borderRadius: '10px', objectFit: 'cover', border: '1px solid var(--border)', flexShrink: 0 }} />
+                          ) : (
+                            <div className="company-mark" style={{ flexShrink: 0 }}>{item.company_name.slice(0, 2).toUpperCase()}</div>
+                          )}
+                          <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>{item.description}</div>
+                        </div>
                       </td>
                     </tr>
                   )}
