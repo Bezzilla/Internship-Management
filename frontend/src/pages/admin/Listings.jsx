@@ -6,6 +6,7 @@ export default function Listings() {
   const [internships, setInternships] = useState([])
   const [loading, setLoading] = useState(true)
   const [success, setSuccess] = useState('')
+  const [expanded, setExpanded] = useState(null)
 
   useEffect(() => {
     api.get('/internships/').then(res => {
@@ -86,27 +87,39 @@ export default function Listings() {
                 </div>
               </td></tr>
             )}
-            {internships.map(item => (
-              <tr key={item.id}>
-                <td><b>{item.title}</b></td>
-                <td style={{ color: 'var(--text-muted)' }}>{item.company_name}</td>
-                <td style={{ color: 'var(--text-muted)' }}>{item.location}</td>
-                <td style={{ color: 'var(--text-muted)' }}>{item.deadline}</td>
-                <td>
-                  <span className={`status ${statusCls[item.status]}`}>
-                    {statusLabel[item.status]}
-                  </span>
-                </td>
-                <td style={{ textAlign: 'right' }}>
-                  {item.status === 'pending_approval' && (
-                    <div className="flex gap-8 justify-end">
-                      <button className="btn btn-success btn-sm" onClick={() => updateStatus(item.id, 'approved')}>Approve</button>
-                      <button className="btn btn-danger btn-sm" onClick={() => updateStatus(item.id, 'rejected')}>Reject</button>
-                    </div>
+            {internships.map(item => {
+              const isExpanded = expanded === item.id
+              return (
+                <>
+                  <tr key={item.id} style={{ cursor: 'pointer' }} onClick={() => setExpanded(isExpanded ? null : item.id)}>
+                    <td><b>{item.title}</b></td>
+                    <td style={{ color: 'var(--text-muted)' }}>{item.company_name}</td>
+                    <td style={{ color: 'var(--text-muted)' }}>{item.location}</td>
+                    <td style={{ color: 'var(--text-muted)' }}>{item.deadline}</td>
+                    <td>
+                      <span className={`status ${statusCls[item.status]}`}>
+                        {statusLabel[item.status]}
+                      </span>
+                    </td>
+                    <td style={{ textAlign: 'right' }}>
+                      {item.status === 'pending_approval' && (
+                        <div className="flex gap-8 justify-end" onClick={e => e.stopPropagation()}>
+                          <button className="btn btn-success btn-sm" onClick={() => updateStatus(item.id, 'approved')}>Approve</button>
+                          <button className="btn btn-danger btn-sm" onClick={() => updateStatus(item.id, 'rejected')}>Reject</button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                  {isExpanded && (
+                    <tr key={`${item.id}-desc`}>
+                      <td colSpan={6} style={{ background: 'var(--blue-light)', padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+                        <div style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>{item.description}</div>
+                      </td>
+                    </tr>
                   )}
-                </td>
-              </tr>
-            ))}
+                </>
+              )
+            })}
           </tbody>
         </table>
       </div>
