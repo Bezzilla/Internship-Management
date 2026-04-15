@@ -50,6 +50,12 @@ class InternshipDeleteView(generics.DestroyAPIView):
         services.delete_internship(self.request.user, instance.id)
 
 
+class InternshipAdminDeleteView(generics.DestroyAPIView):
+    queryset = Internship.objects.all()
+    serializer_class = InternshipSerializer
+    permission_classes = [IsAdmin]
+
+
 class InternshipApproveView(generics.UpdateAPIView):
     queryset = Internship.objects.all()
     serializer_class = InternshipSerializer

@@ -7,4 +7,5 @@ urlpatterns = [
     path('<int:pk>/', views.InternshipDetailView.as_view(), name='internship-detail'),
     path('<int:pk>/approve/', views.InternshipApproveView.as_view(), name='internship-approve'),
     path('<int:pk>/delete/', views.InternshipDeleteView.as_view(), name='internship-delete'),
+    path('<int:pk>/admin-delete/', views.InternshipAdminDeleteView.as_view(), name='internship-admin-delete'),
 ]

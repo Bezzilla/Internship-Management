@@ -21,6 +21,12 @@ export default function Listings() {
     setInternships(prev => prev.map(i => i.id === id ? { ...i, status } : i))
   }
 
+  const handleDelete = async (id) => {
+    await api.delete(`/internships/${id}/admin-delete/`)
+    setInternships(prev => prev.filter(i => i.id !== id))
+    setSuccess('Listing deleted.')
+  }
+
   const pending  = internships.filter(i => i.status === 'pending_approval')
   const approved = internships.filter(i => i.status === 'approved')
   const rejected = internships.filter(i => i.status === 'rejected')
@@ -102,12 +108,15 @@ export default function Listings() {
                       </span>
                     </td>
                     <td style={{ textAlign: 'right' }}>
-                      {item.status === 'pending_approval' && (
-                        <div className="flex gap-8 justify-end" onClick={e => e.stopPropagation()}>
-                          <button className="btn btn-success btn-sm" onClick={() => updateStatus(item.id, 'approved')}>Approve</button>
-                          <button className="btn btn-danger btn-sm" onClick={() => updateStatus(item.id, 'rejected')}>Reject</button>
-                        </div>
-                      )}
+                      <div className="flex gap-8 justify-end" onClick={e => e.stopPropagation()}>
+                        {item.status === 'pending_approval' && (
+                          <>
+                            <button className="btn btn-success btn-sm" onClick={() => updateStatus(item.id, 'approved')}>Approve</button>
+                            <button className="btn btn-danger btn-sm" onClick={() => updateStatus(item.id, 'rejected')}>Reject</button>
+                          </>
+                        )}
+                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(item.id)}>Delete</button>
+                      </div>
                     </td>
                   </tr>
                   {isExpanded && (
