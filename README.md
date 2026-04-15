@@ -63,7 +63,7 @@ The system uses a **Layered Architecture (N-Tier)** with 4 distinct layers, each
 |------|-------------|-------------|
 | **Student** | Self-register | Browse approved internships, apply with resume, track application status, withdraw pending applications |
 | **Supervisor** | Self-register as Supervisor | Post internship listings, upload company logo, delete own listings, review applicants, accept or reject applicants |
-| **Admin** | Django admin panel only | View all listings, approve or reject pending listings |
+| **Admin** | Django admin panel only | View all listings, approve or reject pending listings, delete any listing |
 
 > Admin accounts cannot be created through the registration page. They must be created via the Django admin panel and assigned the `admin` role manually.
 

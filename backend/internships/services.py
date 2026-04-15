@@ -19,7 +19,7 @@ def get_internships_for_user(user):
     if user.role == 'supervisor':
         return Internship.objects.filter(supervisor=user)
     if user.role == 'admin':
-        return Internship.objects.all()
+        return Internship.objects.all().order_by('-created_at')
     return Internship.objects.filter(status=Internship.APPROVED)
 
 
