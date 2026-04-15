@@ -52,7 +52,7 @@ The system uses a **Layered Architecture (N-Tier)** with 4 distinct layers, each
 |-------|---------------|
 | **Presentation** | Display data and capture user input only. No business logic. |
 | **API** | Translate HTTP requests into operations. Delegate all logic to services. |
-| **Business Logic** | All rules live here — duplicate checks, role filtering, status validation. |
+| **Business Logic** | All rules live here  duplicate checks, role filtering, status validation. |
 | **Data** | Define data structure and database constraints only. |
 
 ---
